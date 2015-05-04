@@ -1,0 +1,10 @@
+{
+	"RUNDECKSERVER": "rundeck server name or IP address",
+	"PORT": 4440,
+	"API_KEY": "API Key with correct privileges",
+	"PAGE_SIZE": 1000,
+	"MAXIMUM_DAYS": 90,
+	"TIMEOUT": 60,
+	"DELETE_TIMEOUT": 1200,
+	"VERBOSE": false
+}
