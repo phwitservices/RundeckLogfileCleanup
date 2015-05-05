@@ -7,6 +7,8 @@ import sys
 
 # Returns list of all the project names
 def get_projects():
+    global PROPERTIES
+    global HEADERS
     project_names = []
     try:
        url = URL + 'projects'
@@ -22,6 +24,8 @@ def get_projects():
 
 # Returns list of all the jobids
 def get_jobs_for_project(project_name):
+    global PROPERTIES
+    global HEADERS
     job_ids = []
     try:
         url = URL + 'jobs'
@@ -37,6 +41,8 @@ def get_jobs_for_project(project_name):
 
 # API call to get a page of the executions for a particular job id      
 def get_executions_for_job(job_id,page):
+    global PROPERTIES
+    global HEADERS
     root = None
     try:
         url = URL + 'job/'+job_id+'/executions'
@@ -64,6 +70,8 @@ def get_execution_dates(root):
        
 #API call to delete an execution by ID
 def delete_execution(execution_id):
+    global PROPERTIES
+    global HEADERS
     url = URL + 'execution/'+execution_id
     try:
         r = requests.delete(url, headers=HEADERS, verify=False,timeout=PROPERTIES['TIMEOUT'])
@@ -74,6 +82,8 @@ def delete_execution(execution_id):
 
 #API call to bulk delete executions by ID
 def delete_executions(execution_ids):
+    global PROPERTIES
+    global HEADERS
     url = URL + 'executions/delete'
     try:
         r = requests.post(url, headers=HEADERS, data= json.dumps({'ids':execution_ids}) , verify=False,timeout=PROPERTIES['DELETE_TIMEOUT'])
@@ -86,13 +96,16 @@ def delete_executions(execution_ids):
             pass
         pass
     
-def delete_test(execution_date, today):
-    return ((today - execution_date) > MILLISECONDS_IN_ONE_DAY * PROPERTIES['MAXIMUM_DAYS'])
+def delete_test(execution_date):
+    global PROPERTIES
+    global TODAY
+    millis_in_one_day = 1000*60*60*24
+    return ((TODAY - execution_date) > millis_in_one_day * PROPERTIES['MAXIMUM_DAYS'])
 
 def check_deletion(execid_dates):
     delete= ()
     for exec_id, exec_date in execid_dates.iteritems():
-    	if delete_test(int(exec_date), TODAY):
+    	if delete_test( int(exec_date) ):
             delete  += (exec_id,)
     print "\t\tDelete {0} jobs from this page".format( len(delete) )
     return delete
@@ -100,14 +113,13 @@ def check_deletion(execid_dates):
 #
 # Main
 #
-
-PROPERTIES = json.read('properties.json','r')
+setting_filename = sys.argv[1] if len(sys.argv)>1 else 'properties.json'
+PROPERTIES = json.read( setting_filename ,'r')
 
 API_VERSION = 12
 URL = 'http://{0}:{1}/api/{2}/'.format( PROPERTIES['RUNDECKSERVER'],PROPERTIES['PORT'],API_VERSION)
 HEADERS = {'Content-Type': 'application/json','X-RunDeck-Auth-Token': PROPERTIES['API_KEY'] }
 
-MILLISECONDS_IN_ONE_DAY = 1000*60*60*24
 TODAY = int(round(time.time() * 1000))
 
 for project in get_projects():
