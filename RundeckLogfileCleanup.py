@@ -11,12 +11,12 @@ def get_projects():
     global HEADERS
     project_names = []
     try:
-       url = URL + 'projects'
-       r = requests.get(url, headers=HEADERS, verify=False,timeout=PROPERTIES['TIMEOUT'])
-       root = ET.fromstring(r.text)
-       for project in root:	
-           for name in project.findall('name'):
-               project_names.append(name.text)
+        url = URL + 'projects'
+        r = requests.get(url, headers=HEADERS, verify=False,timeout=PROPERTIES['TIMEOUT'])
+        root = ET.fromstring(r.text)
+        for project in root:	
+            for name in project.findall('name'):
+                project_names.append(name.text)
     except:
         print "Problem with project listing {0}".format(r)
         pass
@@ -76,7 +76,7 @@ def delete_execution(execution_id):
     try:
         r = requests.delete(url, headers=HEADERS, verify=False,timeout=PROPERTIES['TIMEOUT'])
         if PROPERTIES['VERBOSE']:
-            print "\t\t\tDeleted execution id {0} {1} {2}".format( execution_id, r.text, r )
+            print "            Deleted execution id {0} {1} {2}".format( execution_id, r.text, r )
     except:
         pass
 
@@ -88,7 +88,7 @@ def delete_executions(execution_ids):
     try:
         r = requests.post(url, headers=HEADERS, data= json.dumps({'ids':execution_ids}) , verify=False,timeout=PROPERTIES['DELETE_TIMEOUT'])
         if PROPERTIES['VERBOSE']:
-            print "\t\t\tDeleted execution ids {0}".format( execution_ids, r.text, r )
+            print "            Deleted execution ids {0}".format( execution_ids, r.text, r )
     except:
         try:
             print "Problem with execution deletion {0}".format(r)
@@ -105,16 +105,17 @@ def delete_test(execution_date):
 def check_deletion(execid_dates):
     delete= ()
     for exec_id, exec_date in execid_dates.iteritems():
-    	if delete_test( int(exec_date) ):
+        if delete_test( int(exec_date) ):
             delete  += (exec_id,)
-    print "\t\tDelete {0} jobs from this page".format( len(delete) )
+    print "        Delete {0} jobs from this page".format( len(delete) )
     return delete
 
 #
 # Main
 #
 setting_filename = sys.argv[1] if len(sys.argv)>1 else 'properties.json'
-PROPERTIES = json.read( setting_filename ,'r')
+with open(setting_filename,'r') as props_file:    
+    PROPERTIES = json.load( props_file )
 
 API_VERSION = 12
 URL = 'http://{0}:{1}/api/{2}/'.format( PROPERTIES['RUNDECKSERVER'],PROPERTIES['PORT'],API_VERSION)
@@ -125,14 +126,14 @@ TODAY = int(round(time.time() * 1000))
 for project in get_projects():
     print project
     for (jobid,jobname) in get_jobs_for_project(project):
-        print "\t{0}".format(jobname)
+        print "    {0}".format(jobname)
         page = 0
         deleteable = ()
         more = True
         while more :
             try:
                 execution_root = get_executions_for_job(jobid,page)
-                print "\t\tPage {0} got {1} jobs".format(page,execution_root.attrib['count'])
+                print "        Page {0} got {1} jobs".format(page,execution_root.attrib['count'])
                 page += 1
                 deleteable += check_deletion(get_execution_dates(execution_root))
                 more = int(execution_root.attrib['count']) == PROPERTIES['PAGE_SIZE']
@@ -140,5 +141,5 @@ for project in get_projects():
                 print "Problem with executions {0} {1}".format(execution_root,sys.exc_info()[0])
                 more = False
         if (len(deleteable) > 0 ):
-            print "\t\tDeleting {0} jobs in total".format( len(deleteable) )
+            print "        Deleting {0} jobs in total".format( len(deleteable) )
             delete_executions(deleteable)
