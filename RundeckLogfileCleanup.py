@@ -47,7 +47,7 @@ def get_executions_for_job(job_id,page):
     try:
         url = URL + 'job/'+job_id+'/executions'
         r = requests.get(url, params={'max':PROPERTIES['PAGE_SIZE'],'offset':page*PROPERTIES['PAGE_SIZE']}, headers=HEADERS, verify=False,timeout=PROPERTIES['TIMEOUT'])
-        root = ET.fromstring(r.text).find("executions")
+        root = ET.fromstring(r.text)
     except:
         print "Problem with execution listing {0}".format(r)
         pass
