@@ -21,4 +21,4 @@ The other settings should be OK for most installs.
 
 If the job keeps timing out try setting a smaller PAGE_SIZE which will query jobs in smaller batches. The first time you run this script it will probably take a while, if you run it regularly after that then the number of deletions should be lower and the script will therefore execute more quickly.
 
-The script is tested and working on v2.4.0-1 "americano indigo briefcase". I've tried on a v2.2 installation and the job execution format seems to be different.
+The script is tested and working on v2.4.0-1 "americano indigo briefcase". I've tried on a v2.2 installation but the job execution format seems to be different.
