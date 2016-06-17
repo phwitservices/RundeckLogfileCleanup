@@ -117,8 +117,7 @@ setting_filename = sys.argv[1] if len(sys.argv)>1 else 'properties.json'
 with open(setting_filename,'r') as props_file:    
     PROPERTIES = json.load( props_file )
 
-API_VERSION = 12
-URL = 'http://{0}:{1}/api/{2}/'.format( PROPERTIES['RUNDECKSERVER'],PROPERTIES['PORT'],API_VERSION)
+URL = 'http://{0}:{1}/api/{2}/'.format( PROPERTIES['RUNDECKSERVER'],PROPERTIES['PORT'],PROPERTIES['API_VERSION'])
 HEADERS = {'Content-Type': 'application/json','X-RunDeck-Auth-Token': PROPERTIES['API_KEY'] }
 
 TODAY = int(round(time.time() * 1000))

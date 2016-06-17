@@ -2,6 +2,7 @@
 	"RUNDECKSERVER": "rundeck server name or IP address",
 	"PORT": 4440,
 	"API_KEY": "API Key with correct privileges",
+	"API_VERSION": "17",
 	"PAGE_SIZE": 1000,
 	"MAXIMUM_DAYS": 90,
 	"TIMEOUT": 60,
