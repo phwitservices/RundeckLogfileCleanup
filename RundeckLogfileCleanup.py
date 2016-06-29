@@ -32,7 +32,7 @@ def get_jobs_for_project(project_name):
         url = URL + 'jobs'
         payload = { 'project':  project_name }
         r = requests.get(url, params=payload, headers=HEADERS, verify=False,timeout=PROPERTIES['TIMEOUT'])    
-        root = ET.fromstring(r.text)	
+        root = ET.fromstring(r.text.encode('utf-8'))	
         for job in root:
             job_ids.append( (job.attrib['id'],job.find('name').text) )
     except:
@@ -48,7 +48,7 @@ def get_executions_for_job(job_id,page):
     try:
         url = URL + 'job/'+job_id+'/executions'
         r = requests.get(url, params={'max':PROPERTIES['PAGE_SIZE'],'offset':page*PROPERTIES['PAGE_SIZE']}, headers=HEADERS, verify=False,timeout=PROPERTIES['TIMEOUT'])
-        root = ET.fromstring(r.text)
+        root = ET.fromstring(r.text.encode('utf-8'))
     except:
         print "Problem with execution listing {0}".format(r)
         pass
@@ -132,7 +132,7 @@ TODAY = int(round(time.time() * 1000))
 for project in get_projects():
     print project
     for (jobid,jobname) in get_jobs_for_project(project):
-        print "    {0}".format(jobname)
+        print "    {0}".format(jobname.encode('utf-8'))
         page = 0
         deleteable = ()
         more = True
