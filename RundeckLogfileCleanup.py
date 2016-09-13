@@ -14,7 +14,7 @@ def get_projects():
     try:
         url = URL + 'projects'
         r = requests.get(url, headers=HEADERS, verify=False,timeout=PROPERTIES['TIMEOUT'])
-        root = ET.fromstring(r.text)
+        root = ET.fromstring(r.text.encode('utf-8'))
         for project in root:	
             for name in project.findall('name'):
                 project_names.append(name.text)
