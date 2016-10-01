@@ -136,7 +136,7 @@ for project in get_projects():
         page = 0
         deleteable = ()
         more = True
-        while more :
+        while ( more and len(deleteable)< PROPERTIES['MAX_DELETE'] ) :
             try:
                 execution_root = get_executions_for_job(jobid,page)
                 print "        Page {0} got {1} jobs".format(page,execution_root.attrib['count'])
