@@ -5,6 +5,7 @@ import xml.etree.ElementTree as ET
 import time
 import json
 import sys
+import traceback
 
 # Returns list of all the project names
 def get_projects():
@@ -144,6 +145,7 @@ for project in get_projects():
                 deleteable += check_deletion(get_execution_dates(execution_root))
                 more = int(execution_root.attrib['count']) == PROPERTIES['PAGE_SIZE']
             except:
+                print  traceback.format_exc()
                 print "Problem with executions {0} {1}".format(execution_root,sys.exc_info()[0])
                 more = False
         if (len(deleteable) > 0 ):

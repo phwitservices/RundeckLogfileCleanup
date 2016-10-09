@@ -14,6 +14,7 @@ The properties file has the format
 	"MAXIMUM_DAYS": 90,
 	"TIMEOUT": 60,
 	"DELETE_TIMEOUT": 1200,
+	"MAX_DELETE":5000,
 	"VERBOSE": false
 }
 
@@ -21,7 +22,7 @@ You should put your own Rundeck server name and API key in the appropriate place
 
 The other settings should be OK for most installs.
 
-If the job keeps timing out try setting a smaller PAGE_SIZE which will query jobs in smaller batches. The first time you run this script it will probably take a while, if you run it regularly after that then the number of deletions should be lower and the script will therefore execute more quickly.
+If the job keeps timing out try setting a smaller PAGE_SIZE which will query jobs in smaller batches. The first time you run this script it will probably take a while, if you run it regularly after that then the number of deletions should be lower and the script will therefore execute more quickly. If the delete operation keeps timing out try setting the MAX_DELETE to a lower value.
 
 The script is tested and working on v2.4.0-1 "americano indigo briefcase" and 2.6.6 "cafe bonbon fuchsia phone".  Remember to configure the api version corresponding to your Rundeck version.
 
