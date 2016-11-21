@@ -27,3 +27,5 @@ If the job keeps timing out try setting a smaller PAGE_SIZE which will query job
 The script is tested and working on v2.4.0-1 "americano indigo briefcase" and 2.6.6 "cafe bonbon fuchsia phone".  Remember to configure the api version corresponding to your Rundeck version.
 
 I've tried on a v2.2 installation but the job execution format seems to be different.
+
+Daniel Fernandez's project https://github.com/danifr/rundeck-scripts/blob/master/py_scripts/deleteoldlogs.py was as base for the first version of this script.
